@@ -25,7 +25,16 @@ namespace Destiny_Clan_Manager
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/dataTables/css/jquery.dataTables.min.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                    "~/Scripts/DataTables/jquery.dataTables.min.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/site").Include(
+                    "~/Scripts/site.js"
+                ));
         }
     }
 }
