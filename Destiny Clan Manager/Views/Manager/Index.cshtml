@@ -1,43 +1,47 @@
 ﻿@using Destiny_Clan_Manager.Controllers
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Managment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <h2>Clan Manager - @Session["DisplayName"]</h2>
-
-<table class="dataTable">
-    <thead>
-        <tr>
-            <th>Display Name</th>
-            <th>Last Played</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var member in (GetGroupMembersResponse.Result[])Session["GroupMembers"])
-        {
+<form method="post">
+    <table class="dataTable">
+        <thead>
             <tr>
-                <td>
-                    @member.destinyUserInfo.displayName
-                </td>
-                <td>
-                    @{ 
-                        var lastPlayed = ManagerController.getLastPlayed(Session, member.destinyUserInfo.membershipId, member.destinyUserInfo.membershipType);
-                        string displayedTime = lastPlayed.ToString();
-                        if (lastPlayed == DateTime.MinValue) {
-                            displayedTime = "";
-                        }
-                    }
-                    @displayedTime
-                    
-                </td>
-                <td>
-                    @if ((string)Session["destinyMembershipId"] != member.destinyUserInfo.membershipId)
-                    {
-                        //Kick link here?
-                    }
-                </td>
+                <th>Display Name</th>
+                <th>Last Played</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var member in (GetGroupMembersResponse.Result[])Session["GroupMembers"])
+            {
+                <tr>
+                    <td>
+                        @member.destinyUserInfo.displayName
+                    </td>
+                    <td>
+                        @{
+                            var lastPlayed = ManagerController.getLastPlayed(Session, member.destinyUserInfo.membershipId, member.destinyUserInfo.membershipType);
+                            string displayedTime = lastPlayed.ToString();
+                            if (lastPlayed == DateTime.MinValue)
+                            {
+                                displayedTime = "";
+                            }
+                        }
+                        @displayedTime
+
+                    </td>
+                    <td>
+                        @if ((string)Session["destinyMembershipId"] != member.destinyUserInfo.membershipId)
+                        {
+                            var nameOfField = "kick" + member.destinyUserInfo.membershipId;
+                            <label><input type="checkbox" name="@nameOfField" />Kick</label>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="Perform" />
+</form>

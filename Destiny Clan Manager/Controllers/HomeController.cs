@@ -20,7 +20,11 @@ namespace Destiny_Clan_Manager.Controllers
 
             return View();
         }
-
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
+        }
         public ActionResult Login()
         {
             if(Session["OAUTHToken"] != null)

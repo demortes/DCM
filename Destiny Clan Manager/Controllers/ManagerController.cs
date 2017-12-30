@@ -15,6 +15,29 @@ namespace Destiny_Clan_Manager.Controllers
         string APIKey = ConfigurationManager.AppSettings["API_KEY"];
         public ActionResult Index()
         {
+            if (Request.Form.Count > 0)
+            {
+                foreach (string item in Request.Form)
+                {
+                    if (item.IndexOf("kick") == 0)
+                    {
+                        string kickId = item.Remove(0, "kick".Length);
+                        try
+                        {
+                            GetGroupMembersResponse.Result[] groupMembers = (GetGroupMembersResponse.Result[])Session["GroupMembers"];
+                            KickPlayer(kickId, (string)Session["groupId"], (string)Session["OAUTHToken"], (int)Session["membershipType"], ref groupMembers);
+                            Session["GroupMembers"] = groupMembers;
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.TraceError("Exception reached", ex);
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (Session["GroupMembers"] != null)
+                return View();
             if (Session["OAUTHToken"] == null)
                 return RedirectToAction("Login", "Home");
             WebClient wc = new WebClient();
@@ -63,7 +86,8 @@ namespace Destiny_Clan_Manager.Controllers
             try
             {
                 return ProfileResponse.response.profile.data.dateLastPlayed;
-            } catch
+            }
+            catch
             {
                 return DateTime.MinValue;
             }
@@ -118,6 +142,34 @@ namespace Destiny_Clan_Manager.Controllers
                 }
             }
             return View();
+        }
+
+        public static void KickPlayer(string kickId, string groupId, string OauthToken, int membershipType, ref GetGroupMembersResponse.Result[] GroupMembers)
+        {
+            WebClient wc = new WebClient();
+            wc.Headers["X-API-Key"] = ConfigurationManager.AppSettings["API_KEY"];
+            wc.Headers["Authorization"] = "Bearer " + OauthToken;
+
+            string base_url = ConfigurationManager.AppSettings["APIBaseURL"];
+            string KickPath = "/GroupV2/" + groupId + "/Members/" + membershipType + "/" + kickId + "/Kick/";
+            try
+            {
+                wc.DownloadString(base_url + KickPath);
+            } catch
+            {
+                return;
+            }
+            List<GetGroupMembersResponse.Result> listofMembers = new List<GetGroupMembersResponse.Result>(GroupMembers);
+            foreach (var member in listofMembers)
+            {
+                if (member.destinyUserInfo.membershipId == kickId)
+                {
+                    listofMembers.Remove(member);
+                    break;
+                }
+            }
+
+            GroupMembers = listofMembers.ToArray();
         }
     }
 }
