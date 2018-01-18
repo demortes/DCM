@@ -2,8 +2,18 @@
 
 namespace Destiny_Clan_Manager.Controllers
 {
-    internal class GetMembershipsResponse
+    public class GetMembershipsResponse
     {
+        public enum BungieMembershipType
+        {
+            None = 0,
+            Xbox = 1,
+            PSN = 2,
+            PC = 4,
+            Demon = 10,
+            Next = 254,
+            All = -1
+        }
         public Response response { get; set; }
         public int ErrorCode { get; set; }
         public int ThrottleSeconds { get; set; }
@@ -59,7 +69,7 @@ namespace Destiny_Clan_Manager.Controllers
         public class Destinymembership
         {
             public string iconPath { get; set; }
-            public int membershipType { get; set; }
+            public BungieMembershipType membershipType { get; set; }
             public string membershipId { get; set; }
             public string displayName { get; set; }
         }

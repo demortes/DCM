@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Destiny_Clan_Manager.Controllers
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -25,12 +26,12 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    @if (Session["DisplayName"] == null)
+                    @if (Session["ChosenMembership"] == null)
                     {
                         <li>@Html.ActionLink("Login", "Login", "Home")</li>
                     } else
                     {
-                        <li>@Html.ActionLink((string)Session["DisplayName"], "Logout", "Home")</li>
+                        <li>@Html.ActionLink(String.Format("{0} ({1})", ((GetMembershipsResponse.Destinymembership)Session["ChosenMembership"]).displayName, (GetMembershipsResponse.BungieMembershipType)((GetMembershipsResponse.Destinymembership)Session["ChosenMembership"]).membershipType), "Logout", "Home")</li>
                     }
                 </ul>
             </div>

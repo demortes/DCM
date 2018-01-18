@@ -52,7 +52,10 @@ namespace Destiny_Clan_Manager.Controllers
             Session["destinyMembershipId"] = jResponse.response.destinyMemberships[0]?.membershipId;
             Trace.TraceInformation("Found user " + jResponse.response.destinyMemberships[0]?.displayName + " logging in.");
             Session["DisplayName"] = jResponse.response.destinyMemberships[0]?.displayName;
-            Session["membershipType"] = jResponse.response.destinyMemberships[0]?.membershipType;
+            Session["AvailableMemberships"] = jResponse.response.destinyMemberships;
+            if(Session["ChosenMembership"] == null)
+                Session["ChosenMembership"] = jResponse.response.destinyMemberships[0];
+            Session["membershipType"] = (int)jResponse.response.destinyMemberships[0]?.membershipType;
             string destinyMembershipId = Session["destinyMembershipId"].ToString();
             string GetGroupPath = "/GroupV2/User/" + Session["membershipType"] + "/" + destinyMembershipId + "/All/Clan/";
             response = wc.DownloadString(APIBaseURL + GetGroupPath);
