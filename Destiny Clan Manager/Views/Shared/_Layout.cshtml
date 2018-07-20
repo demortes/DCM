@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="~/favicon.ico?v=2" />
     <title>@ViewBag.Title - Destiny Clan Manager</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -29,9 +31,15 @@
                     @if (Session["ChosenMembership"] == null)
                     {
                         <li>@Html.ActionLink("Login", "Login", "Home")</li>
-                    } else
+                    }
+                    else
                     {
-                        <li>@Html.ActionLink(String.Format("{0} ({1})", ((GetMembershipsResponse.Destinymembership)Session["ChosenMembership"]).displayName, (GetMembershipsResponse.BungieMembershipType)((GetMembershipsResponse.Destinymembership)Session["ChosenMembership"]).membershipType), "Logout", "Home")</li>
+                        var displayName = ((GetMembershipsResponse.Destinymembership)Session["ChosenMembership"]).displayName;
+                        var platform = (GetMembershipsResponse.BungieMembershipType)((GetMembershipsResponse.Destinymembership)Session["ChosenMembership"]).membershipType;
+                        var profilePath = Session["MemberIcon"]?.ToString();
+                        string profileUrl = "https://www.bungie.net/" + profilePath;
+                        <li><a href="@Url.Action("Logout", "Home")"><img src="@profileUrl" class="profileImage" /> @displayName (@platform)</a></li>
+                        @*<li><img src="@profileUrl" class="profileImage" />@Html.ActionLink(String.Format("{0} ({1})", displayName, platform), "Logout", "Home", new { @class = "DisplayName" })</li>*@
                     }
                 </ul>
             </div>

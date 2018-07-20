@@ -11,8 +11,9 @@ namespace Destiny_Clan_Manager.Controllers
 {
     public class ManagerController : Controller
     {
-        string APIBaseURL = ConfigurationManager.AppSettings["APIBaseURL"];
-        string APIKey = ConfigurationManager.AppSettings["API_KEY"];
+        private string APIBaseURL = ConfigurationManager.AppSettings["APIBaseURL"];
+        private string APIKey = ConfigurationManager.AppSettings["API_KEY"];
+
         public ActionResult Index()
         {
             if (Request.Form.Count > 0)
@@ -52,8 +53,9 @@ namespace Destiny_Clan_Manager.Controllers
             Session["destinyMembershipId"] = jResponse.response.destinyMemberships[0]?.membershipId;
             Trace.TraceInformation("Found user " + jResponse.response.destinyMemberships[0]?.displayName + " logging in.");
             Session["DisplayName"] = jResponse.response.destinyMemberships[0]?.displayName;
+            Session["MemberIcon"] = jResponse.response.bungieNetUser.profilePicturePath;
             Session["AvailableMemberships"] = jResponse.response.destinyMemberships;
-            if(Session["ChosenMembership"] == null)
+            if (Session["ChosenMembership"] == null)
                 Session["ChosenMembership"] = jResponse.response.destinyMemberships[0];
             Session["membershipType"] = (int)jResponse.response.destinyMemberships[0]?.membershipType;
             string destinyMembershipId = Session["destinyMembershipId"].ToString();
@@ -64,6 +66,7 @@ namespace Destiny_Clan_Manager.Controllers
             Trace.TraceInformation("Got group id " + groupResponse.response.results[0]?.group.groupId + " named " + groupResponse.response.results[0]?.group.name);
             string groupId;
             Session["GroupID"] = groupId = groupResponse.response.results[0]?.group.groupId;
+            Session["CurrentClanName"] = (groupResponse.response.results[0].@group).name;
             string getGroupMembersPath = "/GroupV2/" + groupId + "/members/";
             response = wc.DownloadString(APIBaseURL + getGroupMembersPath);
             GetGroupMembersResponse groupMembersResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<GetGroupMembersResponse>(response);
@@ -95,6 +98,7 @@ namespace Destiny_Clan_Manager.Controllers
                 return DateTime.MinValue;
             }
         }
+
         // GET: Manager/Authorize
         public ActionResult Authorize()
         {
@@ -158,7 +162,8 @@ namespace Destiny_Clan_Manager.Controllers
             try
             {
                 wc.DownloadString(base_url + KickPath);
-            } catch
+            }
+            catch
             {
                 return;
             }

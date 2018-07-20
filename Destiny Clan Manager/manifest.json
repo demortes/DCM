@@ -1,0 +1,20 @@
+﻿{
+  "short_name": "DCM",
+  "name": "Destiny Clan Manager",
+  "start_url": "/",
+  "background_color": "#000000",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/Content/images/icon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/Content/images/icon.jpeg",
+      "sizes": "144x144",
+      "type": "images/jpeg"
+    }
+  ]
+}

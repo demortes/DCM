@@ -3,7 +3,7 @@
     ViewBag.Title = "Managment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Clan Manager - @Session["DisplayName"]</h2>
+<h2>Clan Manager - @Session["CurrentClanName"]</h2>
 <form method="post">
     <table class="dataTable">
         <thead>
@@ -18,7 +18,7 @@
             {
                 <tr>
                     <td>
-                        @member.destinyUserInfo.displayName
+                        <img src="@String.Format("{0}/{1}", "https://www.bungie.net", member.bungieNetUserInfo.iconPath)" class="bungieIcon" />@member.destinyUserInfo.displayName
                     </td>
                     <td>
                         @{
@@ -30,7 +30,6 @@
                             }
                         }
                         @displayedTime
-
                     </td>
                     <td>
                         @if ((string)Session["destinyMembershipId"] != member.destinyUserInfo.membershipId)
