@@ -55,7 +55,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/momentjs")
     @Scripts.Render("~/bundles/datatables")
+    <script src="//cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
     @RenderSection("scripts", required: false)
     @Scripts.Render("~/bundles/site")
 </body>

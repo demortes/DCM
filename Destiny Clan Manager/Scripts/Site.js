@@ -1,7 +1,4 @@
-﻿$(document).ready(function () {
-    $('.dataTable').dataTable({
-        "columnDefs": [
-            {"type": "date", "tagets":1}
-        ]
-    });
+﻿$.fn.dataTable.moment('M/D/YYYY h:mm:ss A');
+$(document).ready(function () {
+    $('.dataTable').dataTable();
 });
